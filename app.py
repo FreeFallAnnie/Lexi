@@ -502,53 +502,65 @@ sheet_gallery = None  # placeholder
 st.markdown(
     """
     <style>
-        /* Make the top section stack on small screens */
-        @media (max-width: 768px) {
-            .responsive-buttons {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                gap: 0.6rem;
-            }
-            .responsive-buttons button {
-                width: 90% !important;
-                font-size: 16px !important;
-            }
+        /* Base layout for all screen sizes */
+        .top-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-bottom: 1rem;
         }
-        @media (min-width: 769px) {
-            .responsive-buttons {
-                display: flex;
+
+        .button-row {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        /* Desktop layout (side-by-side) */
+        @media (min-width: 768px) {
+            .top-section {
                 flex-direction: row;
                 justify-content: space-between;
                 align-items: center;
-                gap: 2rem;
             }
+            .button-row {
+                flex-wrap: nowrap;
+                margin-top: 0;
+            }
+        }
+
+        /* Optional: make buttons flexible on small screens */
+        .button-row button {
+            flex: 1;
+            min-width: 120px;
         }
     </style>
     """,
-    unsafe_allow_html=True
+    unsafe_allow_html=True,
 )
 
-# Wrap buttons + title in a responsive container
-st.markdown('<div class="responsive-buttons">', unsafe_allow_html=True)
+# --- Layout structure ---
+st.markdown('<div class="top-section">', unsafe_allow_html=True)
 
-col1, col2, col3 = st.columns([1, 2, 1])
+# Centered title on all screens
+st.markdown("<h3>Curating Outfits Everyday</h3>", unsafe_allow_html=True)
 
+# Buttons row — below on mobile, beside on desktop
+st.markdown('<div class="button-row">', unsafe_allow_html=True)
+
+col1, col2 = st.columns(2)
 with col1:
-    if st.button("📷 Choose from Camera", key="camera_button"):
+    if st.button("Choose from Camera", key="camera_button"):
         set_selected_item("Camera", sheet_camera)
 
 with col2:
-    st.markdown(
-        "<h3 style='text-align:center; margin-top: 0.2em;'>Curating Outfits Everyday</h3>",
-        unsafe_allow_html=True,
-    )
-
-with col3:
     if st.button("Choose from Gallery", key="gallery_button"):
         st.session_state["gallery_open"] = not st.session_state.get("gallery_open", False)
 
-st.markdown('</div>', unsafe_allow_html=True)
+st.markdown('</div></div>', unsafe_allow_html=True)
 
 
 # --- Step 2: Only show the gallery dropdown when toggled open ---
