@@ -503,14 +503,13 @@ st.markdown(
     <style>
         .top-section {
             display: flex;
-            flex-direction: column; /* always stacked */
-            align-items: center;    /* centers horizontally */
-            justify-content: center; /* centers vertically (if any height) */
+            flex-direction: column;
+            align-items: center;
             text-align: center;
             margin-bottom: 1.2rem;
-            width: 100%;            /* <— ensures the flexbox spans full width */
+            width: 100%;
         }
-
+        
         .button-row {
             display: flex;
             justify-content: center;
@@ -518,37 +517,32 @@ st.markdown(
             margin-top: 0.8rem;
             flex-wrap: wrap;
         }
-
-        /* Buttons look nicer on mobile */
+        
         .button-row button {
             min-width: 140px;
             font-size: 16px;
         }
+
     </style>
     """,
     unsafe_allow_html=True,
 )
 
 
-# --- Layout structure ---
 st.markdown('<div class="top-section">', unsafe_allow_html=True)
-
-# Centered title on all screens
 st.markdown("<h3>Curating Outfits Everyday</h3>", unsafe_allow_html=True)
-
-# Buttons row — below on mobile, beside on desktop
 st.markdown('<div class="button-row">', unsafe_allow_html=True)
 
-col1, col2 = st.columns(2)
-with col1:
-    if st.button("From Camera", key="camera_button"):
-        set_selected_item("Camera", sheet_camera)
+camera_clicked = st.button("From Camera", key="camera_button")
+gallery_clicked = st.button("From Gallery", key="gallery_button")
 
-with col2:
-    if st.button("From Gallery", key="gallery_button"):
-        st.session_state["gallery_open"] = not st.session_state.get("gallery_open", False)
+if camera_clicked:
+    set_selected_item("Camera", sheet_camera)
+if gallery_clicked:
+    st.session_state["gallery_open"] = not st.session_state.get("gallery_open", False)
 
 st.markdown('</div></div>', unsafe_allow_html=True)
+
 
 
 # --- Step 2: Only show the gallery dropdown when toggled open ---
@@ -733,6 +727,7 @@ with st.form("feedback_form"):
 
         except Exception as e:
             st.warning(f"Feedback not saved: {e}")
+
 
 
 
