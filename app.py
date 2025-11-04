@@ -498,20 +498,58 @@ def set_selected_item(source_label, sheet):
 sheet_camera = gs_client.open("lexi_live").worksheet("detections")
 sheet_gallery = None  # placeholder
 
-# UI
+# ---------- Responsive Top Section ----------
+st.markdown(
+    """
+    <style>
+        /* Make the top section stack on small screens */
+        @media (max-width: 768px) {
+            .responsive-buttons {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 0.6rem;
+            }
+            .responsive-buttons button {
+                width: 90% !important;
+                font-size: 16px !important;
+            }
+        }
+        @media (min-width: 769px) {
+            .responsive-buttons {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                gap: 2rem;
+            }
+        }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+# Wrap buttons + title in a responsive container
+st.markdown('<div class="responsive-buttons">', unsafe_allow_html=True)
+
 col1, col2, col3 = st.columns([1, 2, 1])
 
 with col1:
-    if st.button("Choose Item from Camera", key="camera_button"):
+    if st.button("📷 Choose from Camera", key="camera_button"):
         set_selected_item("Camera", sheet_camera)
 
 with col2:
-    st.markdown("<h3 style='text-align:center;'>Curating Outfits Everyday</h3>", unsafe_allow_html=True)
+    st.markdown(
+        "<h3 style='text-align:center; margin-top: 0.4em;'>Curating Outfits Everyday</h3>",
+        unsafe_allow_html=True,
+    )
 
 with col3:
-    # --- Step 1: Toggle visibility of the gallery dropdown ---
-    if st.button("Choose Item from Gallery", key="gallery_button"):
+    if st.button("🖼️ Choose from Gallery", key="gallery_button"):
         st.session_state["gallery_open"] = not st.session_state.get("gallery_open", False)
+
+st.markdown('</div>', unsafe_allow_html=True)
+
 
 # --- Step 2: Only show the gallery dropdown when toggled open ---
 if st.session_state.get("gallery_open", False):
@@ -695,4 +733,5 @@ with st.form("feedback_form"):
 
         except Exception as e:
             st.warning(f"Feedback not saved: {e}")
+
 
