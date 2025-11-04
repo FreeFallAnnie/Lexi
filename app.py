@@ -498,49 +498,44 @@ def set_selected_item(source_label, sheet):
 sheet_camera = gs_client.open("lexi_live").worksheet("detections")
 sheet_gallery = None  # placeholder
 
-# ---------- Centered Responsive Top Section ----------
+# ---------- Responsive Top Section ----------
 st.markdown(
     """
     <style>
-        /* Centered layout container */
+        /* Base layout for all screen sizes */
         .top-section {
             display: flex;
             flex-direction: column;
             align-items: center;
             text-align: center;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
         }
 
-        /* Title styling */
-        .top-section h3 {
-            margin-bottom: 0.6rem;
-            font-size: 1.4rem;
-        }
-
-        /* Buttons layout */
         .button-row {
             display: flex;
             justify-content: center;
-            align-items: center;
             gap: 1rem;
+            margin-top: 0.5rem;
             flex-wrap: wrap;
         }
 
-        /* Button appearance */
-        .button-row button {
-            flex: 1;
-            min-width: 130px;
-            max-width: 200px;
-            font-size: 16px !important;
+        /* Desktop layout (side-by-side) */
+        @media (min-width: 768px) {
+            .top-section {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+            .button-row {
+                flex-wrap: nowrap;
+                margin-top: 0;
+            }
         }
 
-        /* Optional: subtle background for the header area */
-        .header-bg {
-            background: linear-gradient(135deg, #fef6ff 0%, #f9f9ff 100%);
-            padding: 1rem 0.5rem;
-            border-radius: 12px;
-            width: 100%;
-            margin-bottom: 1.5rem;
+        /* Optional: make buttons flexible on small screens */
+        .button-row button {
+            flex: 1;
+            min-width: 120px;
         }
     </style>
     """,
@@ -548,15 +543,15 @@ st.markdown(
 )
 
 # --- Layout structure ---
-st.markdown('<div class="header-bg"><div class="top-section">', unsafe_allow_html=True)
+st.markdown('<div class="top-section">', unsafe_allow_html=True)
 
-# Title (centered)
+# Centered title on all screens
 st.markdown("<h3>Curating Outfits Everyday</h3>", unsafe_allow_html=True)
 
-# Buttons (centered below title)
+# Buttons row — below on mobile, beside on desktop
 st.markdown('<div class="button-row">', unsafe_allow_html=True)
 
-col1, col2 = st.columns(2, gap="small")
+col1, col2 = st.columns(2)
 with col1:
     if st.button("Choose from Camera", key="camera_button"):
         set_selected_item("Camera", sheet_camera)
@@ -565,8 +560,7 @@ with col2:
     if st.button("Choose from Gallery", key="gallery_button"):
         st.session_state["gallery_open"] = not st.session_state.get("gallery_open", False)
 
-st.markdown('</div></div></div>', unsafe_allow_html=True)
-
+st.markdown('</div></div>', unsafe_allow_html=True)
 
 
 # --- Step 2: Only show the gallery dropdown when toggled open ---
@@ -751,6 +745,7 @@ with st.form("feedback_form"):
 
         except Exception as e:
             st.warning(f"Feedback not saved: {e}")
+
 
 
 
