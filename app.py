@@ -523,7 +523,7 @@ st.markdown(
         @media (min-width: 768px) {
             .top-section {
                 flex-direction: row;
-                justify-content: space-between;
+                justify-content: center;
                 align-items: center;
             }
             .button-row {
@@ -745,6 +745,7 @@ with st.form("feedback_form"):
 
         except Exception as e:
             st.warning(f"Feedback not saved: {e}")
+
 
 
 
