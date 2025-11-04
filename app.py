@@ -540,12 +540,12 @@ with col1:
 
 with col2:
     st.markdown(
-        "<h3 style='text-align:center; margin-top: 0.4em;'>Curating Outfits Everyday</h3>",
+        "<h3 style='text-align:center; margin-top: 0.2em;'>Curating Outfits Everyday</h3>",
         unsafe_allow_html=True,
     )
 
 with col3:
-    if st.button("🖼️ Choose from Gallery", key="gallery_button"):
+    if st.button("Choose from Gallery", key="gallery_button"):
         st.session_state["gallery_open"] = not st.session_state.get("gallery_open", False)
 
 st.markdown('</div>', unsafe_allow_html=True)
@@ -733,5 +733,6 @@ with st.form("feedback_form"):
 
         except Exception as e:
             st.warning(f"Feedback not saved: {e}")
+
 
 
