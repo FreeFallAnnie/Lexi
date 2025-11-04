@@ -454,6 +454,82 @@ def query_agent(agent_name):
 st.set_page_config(page_title="LEXI – Wardrobe Curator", page_icon="🟡", layout="wide")
 st.markdown("<h1 style='text-align: center; font-size: 80px;'>LEXI</h1>", unsafe_allow_html=True)
 
+# ---------- CUSTOM CSS FOR RESPONSIVE UI ----------
+st.markdown("""
+<style>
+/* Global layout reset */
+main {
+    padding: 0.5rem 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Title & subtitle */
+h1 {
+    font-size: 3rem;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 0.3rem;
+}
+h3 {
+    font-size: 1.3rem;
+    text-align: center;
+    font-weight: 500;
+    color: #444;
+    margin-top: 0.5rem;
+    margin-bottom: 1.3rem;
+}
+
+/* Button styling */
+.stButton>button {
+    border-radius: 12px !important;
+    padding: 0.75rem 1.5rem !important;
+    font-weight: 600 !important;
+    font-size: 1rem !important;
+    width: 100%;
+    max-width: 320px;
+    background-color: #f8f8f8 !important;
+    border: 1px solid #ddd !important;
+    color: #222 !important;
+    transition: all 0.25s ease-in-out;
+}
+.stButton>button:hover {
+    transform: scale(1.03);
+    background-color: #f2f2f2 !important;
+}
+
+/* Info and captions */
+.stInfo, .stCaption {
+    text-align: center;
+    max-width: 400px;
+}
+
+/* Section cards */
+.section {
+    background: #fafafa;
+    border-radius: 20px;
+    padding: 1rem 1.5rem;
+    margin: 0.5rem 0 1.2rem 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    width: 100%;
+    max-width: 420px;
+}
+
+/* Responsive behavior */
+@media (max-width: 768px) {
+    h1 { font-size: 2.3rem; }
+    h3 { font-size: 1.1rem; }
+    .stButton>button {
+        font-size: 0.95rem !important;
+        padding: 0.7rem 1.2rem !important;
+    }
+    .section { padding: 1rem; max-width: 95%; }
+}
+</style>
+""", unsafe_allow_html=True)
+
+
 # ---------- GOOGLE SHEET CONNECTION ----------
 
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
@@ -498,20 +574,27 @@ def set_selected_item(source_label, sheet):
 sheet_camera = gs_client.open("lexi_live").worksheet("detections")
 sheet_gallery = None  # placeholder
 
-# UI
-col1, col2, col3 = st.columns([1, 2, 1])
+# ---------- LEXI MAIN INTERFACE ----------
+st.markdown("<h1>LEXI</h1>", unsafe_allow_html=True)
+st.markdown("<h3>Curating Outfits Everyday</h3>", unsafe_allow_html=True)
 
-with col1:
-    if st.button("Choose Item from Camera", key="camera_button"):
-        set_selected_item("Camera", sheet_camera)
+st.markdown('<div class="section">', unsafe_allow_html=True)
+st.button("📸 Choose Item from Camera", key="camera_button", on_click=lambda: set_selected_item("Camera", sheet_camera))
+st.button("🖼️ Choose Item from Gallery", key="gallery_button", on_click=lambda: st.session_state.update({"gallery_open": not st.session_state.get("gallery_open", False)}))
+st.markdown('</div>', unsafe_allow_html=True)
 
-with col2:
-    st.markdown("<h3 style='text-align:center;'>Curating Outfits Everyday</h3>", unsafe_allow_html=True)
+if st.session_state.get("gallery_open", False):
+    st.markdown('<div class="section">', unsafe_allow_html=True)
+    st.markdown("### Select from Gallery")
+    # your existing gallery dropdown logic here (unchanged)
+    st.markdown('</div>', unsafe_allow_html=True)
 
-with col3:
-    # --- Step 1: Toggle visibility of the gallery dropdown ---
-    if st.button("Choose Item from Gallery", key="gallery_button"):
-        st.session_state["gallery_open"] = not st.session_state.get("gallery_open", False)
+if "selected_item_id" in st.session_state:
+    src = st.session_state.get("selected_source", "Unknown Source")
+    st.info(f"Selected item: **{st.session_state['selected_item_id']}** from {src}")
+else:
+    st.caption("No item selected yet — choose from Camera or Gallery.")
+
 
 # --- Step 2: Only show the gallery dropdown when toggled open ---
 if st.session_state.get("gallery_open", False):
@@ -695,4 +778,5 @@ with st.form("feedback_form"):
 
         except Exception as e:
             st.warning(f"Feedback not saved: {e}")
+
 
