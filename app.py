@@ -498,52 +498,20 @@ def set_selected_item(source_label, sheet):
 sheet_camera = gs_client.open("lexi_live").worksheet("detections")
 sheet_gallery = None  # placeholder
 
-st.markdown(
-    """
-    <style>
-        .top-section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            margin-bottom: 1.2rem;
-            width: 100%;
-        }
-        
-        .button-row {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-top: 0.8rem;
-            flex-wrap: wrap;
-        }
-        
-        .button-row button {
-            min-width: 140px;
-            font-size: 16px;
-        }
+# UI
+col1, col2, col3 = st.columns([1, 2, 1])
 
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
+with col1:
+    if st.button("Choose Item from Camera", key="camera_button"):
+        set_selected_item("Camera", sheet_camera)
 
+with col2:
+    st.markdown("<h3 style='text-align:center;'>Curating Outfits Everyday</h3>", unsafe_allow_html=True)
 
-st.markdown('<div class="top-section">', unsafe_allow_html=True)
-st.markdown("<h3>Curating Outfits Everyday</h3>", unsafe_allow_html=True)
-st.markdown('<div class="button-row">', unsafe_allow_html=True)
-
-camera_clicked = st.button("From Camera", key="camera_button")
-gallery_clicked = st.button("From Gallery", key="gallery_button")
-
-if camera_clicked:
-    set_selected_item("Camera", sheet_camera)
-if gallery_clicked:
-    st.session_state["gallery_open"] = not st.session_state.get("gallery_open", False)
-
-st.markdown('</div></div>', unsafe_allow_html=True)
-
-
+with col3:
+    # --- Step 1: Toggle visibility of the gallery dropdown ---
+    if st.button("Choose Item from Gallery", key="gallery_button"):
+        st.session_state["gallery_open"] = not st.session_state.get("gallery_open", False)
 
 # --- Step 2: Only show the gallery dropdown when toggled open ---
 if st.session_state.get("gallery_open", False):
@@ -727,12 +695,4 @@ with st.form("feedback_form"):
 
         except Exception as e:
             st.warning(f"Feedback not saved: {e}")
-
-
-
-
-
-
-
-
 
