@@ -10,10 +10,17 @@ from dotenv import load_dotenv
 from openai import OpenAI
 
 # --- CONFIG ---
-st.set_page_config(page_title="Lexi Response Analyser", page_icon="🪞", layout="wide")
+st.set_page_config(page_title="Lexi Response Analyser", page_icon="🟡", layout="wide")
 
 load_dotenv()
-api_key = os.getenv("OPENAI_API_KEY") or st.secrets.get("OPENAI_API_KEY")
+
+# --- Handle OpenAI key from either .env or Streamlit secrets safely ---
+if "OPENAI_API_KEY" in os.environ:
+    api_key = os.environ["OPENAI_API_KEY"]
+else:
+    api_key = st.secrets["OPENAI_API_KEY"]
+
+from openai import OpenAI
 client = OpenAI(api_key=api_key)
 
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
@@ -21,7 +28,7 @@ creds = ServiceAccountCredentials.from_json_keyfile_dict(st.secrets["google"], s
 gs_client = gspread.authorize(creds)
 
 # --- DATA LOAD ---
-st.title("🪞 Lexi Response Similarity Explorer")
+st.title("Lexi Response Similarity Explorer")
 
 try:
     sheet = gs_client.open("lexi_live").worksheet("form responses")
