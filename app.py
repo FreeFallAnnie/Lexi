@@ -501,13 +501,14 @@ sheet_gallery = None  # placeholder
 st.markdown(
     """
     <style>
-        /* Layout: title on one line, buttons centered below */
         .top-section {
             display: flex;
             flex-direction: column; /* always stacked */
-            align-items: center;
+            align-items: center;    /* centers horizontally */
+            justify-content: center; /* centers vertically (if any height) */
             text-align: center;
             margin-bottom: 1.2rem;
+            width: 100%;            /* <— ensures the flexbox spans full width */
         }
 
         .button-row {
@@ -540,11 +541,11 @@ st.markdown('<div class="button-row">', unsafe_allow_html=True)
 
 col1, col2 = st.columns(2)
 with col1:
-    if st.button("Choose from Camera", key="camera_button"):
+    if st.button("From Camera", key="camera_button"):
         set_selected_item("Camera", sheet_camera)
 
 with col2:
-    if st.button("Choose from Gallery", key="gallery_button"):
+    if st.button("From Gallery", key="gallery_button"):
         st.session_state["gallery_open"] = not st.session_state.get("gallery_open", False)
 
 st.markdown('</div></div>', unsafe_allow_html=True)
@@ -732,6 +733,7 @@ with st.form("feedback_form"):
 
         except Exception as e:
             st.warning(f"Feedback not saved: {e}")
+
 
 
 
