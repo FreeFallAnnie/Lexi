@@ -498,49 +498,36 @@ def set_selected_item(source_label, sheet):
 sheet_camera = gs_client.open("lexi_live").worksheet("detections")
 sheet_gallery = None  # placeholder
 
-# ---------- Responsive Top Section ----------
 st.markdown(
     """
     <style>
-        /* Base layout for all screen sizes */
+        /* Layout: title on one line, buttons centered below */
         .top-section {
             display: flex;
-            flex-direction: column;
+            flex-direction: column; /* always stacked */
             align-items: center;
             text-align: center;
-            margin-bottom: 1rem;
+            margin-bottom: 1.2rem;
         }
 
         .button-row {
             display: flex;
             justify-content: center;
             gap: 1rem;
-            margin-top: 0.5rem;
+            margin-top: 0.8rem;
             flex-wrap: wrap;
         }
 
-        /* Desktop layout (side-by-side) */
-        @media (min-width: 768px) {
-            .top-section {
-                flex-direction: row;
-                justify-content: center;
-                align-items: center;
-            }
-            .button-row {
-                flex-wrap: nowrap;
-                margin-top: 0;
-            }
-        }
-
-        /* Optional: make buttons flexible on small screens */
+        /* Buttons look nicer on mobile */
         .button-row button {
-            flex: 1;
-            min-width: 120px;
+            min-width: 140px;
+            font-size: 16px;
         }
     </style>
     """,
     unsafe_allow_html=True,
 )
+
 
 # --- Layout structure ---
 st.markdown('<div class="top-section">', unsafe_allow_html=True)
@@ -745,6 +732,7 @@ with st.form("feedback_form"):
 
         except Exception as e:
             st.warning(f"Feedback not saved: {e}")
+
 
 
 
